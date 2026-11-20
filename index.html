@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Progress Dashboard</title>
+<meta name="description" content="Progress of a critical systematic review of outcome evidence in generative AI language learning research.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232f5d8a'/%3E%3Crect x='3' y='9' width='2' height='4' fill='white'/%3E%3Crect x='7' y='6' width='2' height='7' fill='white'/%3E%3Crect x='11' y='3' width='2' height='10' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#1c2430; --muted:#5d6878; --line:#e3e7ec;
+  --accent:#2f5d8a; --accent-soft:#dbe6f1; --done:#2f7d5b; --done-soft:#dcefe5;
+  --active:#b26a00; --active-soft:#fbeccf; --todo:#c3cad3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#11151b; --card:#1a2029; --ink:#e7ebf0; --muted:#9aa5b3; --line:#2a323e;
+    --accent:#7fb0e0; --accent-soft:#22364b; --done:#5cc196; --done-soft:#1d3a2e;
+    --active:#f0b44c; --active-soft:#3e3119; --todo:#3a4350;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 48px}
+header h1{font-size:1.35rem;line-height:1.3;margin:6px 0 8px;font-weight:650}
+.eyebrow{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.meta{color:var(--muted);font-size:.9rem}
+.meta a{color:var(--accent)}
+.grid{display:grid;gap:16px;margin-top:20px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h2{font-size:1rem;margin:0 0 14px;font-weight:650}
+.kpi .label{color:var(--muted);font-size:.82rem}
+.kpi .value{font-size:1.9rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:4px}
+.kpi .sub{color:var(--muted);font-size:.82rem;margin-top:2px}
+.bar{height:10px;background:var(--todo);border-radius:6px;overflow:hidden;margin-top:10px}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:6px}
+/* timeline */
+.tl{position:relative}
+.tl-row{display:grid;grid-template-columns:minmax(150px,230px) 1fr 44px;gap:12px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.tl-row:first-of-type{border-top:0}
+.tl-name{font-size:.9rem;font-weight:550}
+.tl-name small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
+.tl-track{position:relative;height:18px}
+.tl-seg{position:absolute;top:3px;height:12px;border-radius:6px;background:var(--todo);overflow:hidden}
+.tl-seg>span{display:block;height:100%}
+.tl-pct{font-size:.82rem;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.tl-axis{display:grid;grid-template-columns:minmax(150px,230px) 1fr 44px;gap:12px;font-size:.72rem;color:var(--muted)}
+.tl-axis .ticks{position:relative;height:16px}
+.tl-axis .ticks span{position:absolute;transform:translateX(-50%)}
+.today{position:absolute;top:0;bottom:0;width:2px;background:var(--active);opacity:.8;pointer-events:none}
+.today-label{position:absolute;top:-2px;font-size:.7rem;color:var(--active);transform:translateX(4px);font-weight:600}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* prisma */
+.prisma{display:grid;gap:10px}
+.prow{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+.pbox{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.pbox .n{font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums}
+.pbox .t{font-size:.82rem;color:var(--muted)}
+.pbox.main{border-color:var(--accent);background:var(--accent-soft)}
+.pbox.pending .n{color:var(--muted);font-weight:500;font-size:1rem}
+.pstage{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:6px}
+.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+/* agreement */
+.ag{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.ag:first-of-type{border-top:0}
+.ag .v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ag .d{color:var(--muted);font-size:.82rem}
+.pill{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.pill.done{background:var(--done-soft);color:var(--done)}
+.pill.next,.pill.active{background:var(--active-soft);color:var(--active)}
+.pill.planned,.pill.pending{background:var(--line);color:var(--muted)}
+/* tasks */
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:0 8px 8px}
+td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:top}
+td.due{white-space:nowrap;font-variant-numeric:tabular-nums}
+footer{margin-top:28px;color:var(--muted);font-size:.8rem}
+.err{color:#b3261e}
+@media (max-width:640px){
+  .tl-row,.tl-axis{grid-template-columns:110px 1fr 36px;gap:8px}
+  .tl-name small{display:none}
+  .prow{grid-template-columns:1fr}
+  table thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{border-top:1px solid var(--line);padding:8px 0}
+  td{border:0;padding:2px 0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Systematic critical review · progress</div>
+    <h1 id="title">Loading…</h1>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <section class="grid kpis" id="kpis"></section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Phase timeline</h2>
+      <div class="tl" id="timeline"></div>
+      <div class="legend">
+        <span><i style="background:var(--done)"></i>Done</span>
+        <span><i style="background:var(--active)"></i>In progress</span>
+        <span><i style="background:var(--todo)"></i>Planned</span>
+        <span><i style="background:var(--active);width:2px"></i>Today</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="card">
+      <h2>PRISMA flow</h2>
+      <div class="prisma" id="prisma"></div>
+    </div>
+    <div class="card">
+      <h2>Reviewer agreement</h2>
+      <div id="agreement"></div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Next tasks and targets</h2>
+      <table>
+        <thead><tr><th>Task</th><th>Owner</th><th>Target</th><th>Status</th></tr></thead>
+        <tbody id="tasks"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer id="footer">Target dates are planning estimates and may move. Counts are aggregate only; no record-level screening data is shown.</footer>
+</div>
+
+<script>
+const fmt = n => n == null ? null : Number(n).toLocaleString('en-US');
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const d = s => new Date(s + 'T00:00:00');
+const fdate = s => { const x = d(s); return x.getDate() + ' ' + MONTHS[x.getMonth()] + ' ' + x.getFullYear(); };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const statusOf = p => p.progress >= 100 ? 'done' : p.progress > 0 ? 'active' : 'planned';
+
+fetch('data.json', {cache:'no-store'}).then(r => r.json()).then(render).catch(e => {
+  document.getElementById('title').innerHTML = '<span class="err">Could not load data.json</span>';
+  console.error(e);
+});
+
+function render(D){
+  document.getElementById('title').textContent = D.title;
+  const reg = D.registration;
+  document.getElementById('meta').innerHTML =
+    esc(D.authors) + '<br>' + esc(reg.label) + ': <a href="https://doi.org/' + esc(reg.doi) + '">doi.org/' + esc(reg.doi) + '</a>' +
+    ' (registered ' + fdate(reg.date) + ') · <a href="' + esc(reg.project_url) + '">OSF project</a>';
+
+  // overall
+  const totalW = D.phases.reduce((a,p)=>a+p.weight,0);
+  const overall = Math.round(D.phases.reduce((a,p)=>a+p.weight*p.progress,0)/totalW);
+  const daysLeft = Math.max(0, Math.round((d(D.target_submission) - d(new Date().toISOString().slice(0,10))) / 86400000));
+  const P = D.prisma;
+  const doneAg = D.agreement.filter(a=>a.value);
+  document.getElementById('kpis').innerHTML = `
+    <div class="card kpi"><div class="label">Overall progress</div><div class="value">${overall}%</div>
+      <div class="bar"><span style="width:${overall}%"></span></div></div>
+    <div class="card kpi"><div class="label">Current step</div><div class="value" style="font-size:1.05rem;margin-top:8px">${esc(D.current_step)}</div></div>
+    <div class="card kpi"><div class="label">Records to screen</div><div class="value">${fmt(P.screened)}</div>
+      <div class="sub">from ${fmt(P.identified)} identified</div></div>
+    <div class="card kpi"><div class="label">Target submission</div><div class="value" style="font-size:1.35rem;margin-top:6px">${fdate(D.target_submission)}</div>
+      <div class="sub">${daysLeft} days to go</div></div>`;
+
+  // timeline
+  const starts = D.phases.map(p=>d(p.start)), ends = D.phases.map(p=>d(p.end));
+  let min = new Date(Math.min(...starts)); min = new Date(min.getFullYear(), min.getMonth(), 1);
+  let max = new Date(Math.max(...ends)); max = new Date(max.getFullYear(), max.getMonth()+1, 1);
+  const span = max - min, pos = t => ((t - min)/span*100);
+  const today = new Date(); const tPos = pos(today);
+  let ticks = ''; for (let m = new Date(min); m <= max; m = new Date(m.getFullYear(), m.getMonth()+1, 1)) {
+    const lbl = MONTHS[m.getMonth()] + (m.getMonth()===0 || +m===+min ? ' ' + String(m.getFullYear()).slice(2) : '');
+    ticks += `<span style="left:${pos(m)}%">${lbl}</span>`;
+  }
+  let rows = `<div class="tl-axis"><div></div><div class="ticks">${ticks}</div><div></div></div>`;
+  D.phases.forEach((p,i) => {
+    const st = statusOf(p), col = st==='done'?'var(--done)':st==='active'?'var(--active)':'var(--todo)';
+    const l = pos(starts[i]), w = Math.max(1.2, pos(ends[i]) - l);
+    const todayLine = (tPos>=0 && tPos<=100) ? `<div class="today" style="left:${tPos}%"></div>` : '';
+    rows += `<div class="tl-row" title="${esc(p.note)}">
+      <div class="tl-name">${esc(p.name)}<small>${fdate(p.start)} – ${fdate(p.end)}</small></div>
+      <div class="tl-track">${todayLine}<div class="tl-seg" style="left:${l}%;width:${w}%"><span style="width:${p.progress}%;background:${col}"></span></div></div>
+      <div class="tl-pct">${p.progress}%</div></div>`;
+  });
+  document.getElementById('timeline').innerHTML = rows;
+
+  // prisma
+  const box = (n, t, cls='') => `<div class="pbox ${cls} ${n==null?'pending':''}"><div class="n">${n==null?'Pending':fmt(n)}</div><div class="t">${t}</div></div>`;
+  const srcs = P.sources.map(s => `${esc(s.name)} ${fmt(s.n)}`).join(' · ');
+  document.getElementById('prisma').innerHTML = `
+    <div class="pstage">Identification</div>
+    <div class="prow">${box(P.identified,'Records identified<br>'+srcs,'main')}${box(P.duplicates_removed,'Duplicates removed<br>'+esc(P.duplicates_note))}</div>
+    <div class="pstage">Screening</div>
+    <div class="prow">${box(P.screened,'Records screened (title and abstract)','main')}${box(P.excluded_title_abstract,'Records excluded')}</div>
+    <div class="prow">${box(P.sought_full_text,'Reports sought for retrieval')}${box(P.not_retrieved,'Reports not retrieved')}</div>
+    <div class="prow">${box(P.assessed_full_text,'Reports assessed for eligibility')}${box(P.excluded_full_text,'Reports excluded, with reasons')}</div>
+    <div class="pstage">Included</div>
+    <div class="prow">${box(P.included,'Studies included in review','main')}<div></div></div>`;
+
+  // agreement
+  document.getElementById('agreement').innerHTML = D.agreement.map(a => `
+    <div class="ag"><div><div>${esc(a.label)}</div><div class="d">${esc(a.detail)}</div></div>
+    <div style="text-align:right">${a.value?`<div class="v">${esc(a.value)}</div>`:''}<span class="pill ${esc(a.status)}">${a.status==='done'?'Done':'Pending'}</span></div></div>`).join('');
+
+  // tasks
+  const label = {done:'Done', next:'Next up', active:'In progress', planned:'Planned'};
+  document.getElementById('tasks').innerHTML = D.tasks.map(t => `
+    <tr><td>${esc(t.task)}</td><td>${esc(t.owner)}</td><td class="due">${fdate(t.due)}</td>
+    <td><span class="pill ${esc(t.status)}">${label[t.status]||esc(t.status)}</span></td></tr>`).join('');
+
+  document.getElementById('footer').innerHTML = 'Last updated ' + fdate(D.last_updated) + '. Target dates are planning estimates and may move. Counts are aggregate only; no record-level screening data is shown.';
+}
+</script>
+</body>
+</html>

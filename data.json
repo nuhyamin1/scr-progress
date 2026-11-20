@@ -1,0 +1,61 @@
+{
+  "last_updated": "2026-11-19",
+  "title": "Assisted Performance or Second Language Development? A Critical Systematic Review of Outcome Evidence in Generative AI Language Learning Research",
+  "authors": "Adam, Ni Made Ratminingsih, Ni Nyoman Padmadewi, I.G.A Lokita Purnamika Utami",
+  "registration": {
+    "label": "OSF registration",
+    "doi": "10.17605/OSF.IO/Q29B5",
+    "date": "2026-11-02",
+    "project_url": "https://osf.io/9njmp"
+  },
+  "target_submission": "2027-05-31",
+  "current_step": "Screening calibration (50-record sample)",
+
+  "phases": [
+    { "name": "Protocol and registration", "weight": 15, "progress": 100, "start": "2026-10-15", "end": "2026-11-02", "note": "Registered on OSF, 2 Nov 2026" },
+    { "name": "Searches and deduplication", "weight": 10, "progress": 100, "start": "2026-11-05", "end": "2026-11-10", "note": "ERIC, Scopus, Google Scholar; Zotero + Rayyan" },
+    { "name": "Screening calibration", "weight": 5, "progress": 20, "start": "2026-11-10", "end": "2026-11-30", "note": "50-record sample drawn; both reviewers to screen it" },
+    { "name": "Title and abstract screening", "weight": 15, "progress": 0, "start": "2026-12-01", "end": "2027-01-15", "note": "3,079 records, blind, in Rayyan" },
+    { "name": "Full-text retrieval and screening", "weight": 10, "progress": 0, "start": "2027-01-16", "end": "2027-02-28", "note": "Adjudicator settles disagreements" },
+    { "name": "Coding and quality appraisal", "weight": 20, "progress": 0, "start": "2027-03-01", "end": "2027-04-10", "note": "Outcomes, claims, 3-part appraisal" },
+    { "name": "Synthesis", "weight": 10, "progress": 0, "start": "2027-04-11", "end": "2027-04-30", "note": "Meta-analysis only if the data allow" },
+    { "name": "Writing and submission", "weight": 15, "progress": 25, "start": "2026-10-20", "end": "2027-05-31", "note": "Introduction and Method drafted (v1)" }
+  ],
+
+  "prisma": {
+    "sources": [
+      { "name": "Scopus", "n": 2790 },
+      { "name": "ERIC", "n": 662 },
+      { "name": "Google Scholar", "n": 312 }
+    ],
+    "identified": 3764,
+    "duplicates_removed": 685,
+    "duplicates_note": "Zotero 512 + Rayyan 173",
+    "screened": 3079,
+    "excluded_title_abstract": null,
+    "sought_full_text": null,
+    "not_retrieved": null,
+    "assessed_full_text": null,
+    "excluded_full_text": null,
+    "included": null
+  },
+
+  "agreement": [
+    { "label": "Pilot coding (5 studies)", "value": "94%", "detail": "116 of 124 decisions agreed", "status": "done" },
+    { "label": "Screening calibration (50 records)", "value": null, "detail": "Cohen's kappa, pending", "status": "pending" },
+    { "label": "Title and abstract screening", "value": null, "detail": "Cohen's kappa, pending", "status": "pending" },
+    { "label": "Full-text screening", "value": null, "detail": "Cohen's kappa, pending", "status": "pending" }
+  ],
+
+  "tasks": [
+    { "task": "Send the protocol and Appendix A to the second reviewer", "owner": "Lead reviewer", "due": "2026-11-21", "status": "next" },
+    { "task": "Screen the 50-record calibration sample independently", "owner": "Lead and second reviewer", "due": "2026-11-28", "status": "next" },
+    { "task": "Compute calibration kappa and agree any rule clarifications", "owner": "Lead reviewer", "due": "2026-11-30", "status": "planned" },
+    { "task": "Screen titles and abstracts of 3,079 records (team-authored records handled independently)", "owner": "Lead and second reviewer", "due": "2027-01-15", "status": "planned" },
+    { "task": "Retrieve and screen full texts; settle disagreements", "owner": "Reviewers + adjudicator", "due": "2027-02-28", "status": "planned" },
+    { "task": "Code outcomes, claims and quality appraisal", "owner": "Lead and second reviewer", "due": "2027-04-10", "status": "planned" },
+    { "task": "Run the synthesis (and meta-analysis if possible)", "owner": "Lead reviewer", "due": "2027-04-30", "status": "planned" },
+    { "task": "Write Results and Discussion; PRISMA diagram; fill Method placeholders", "owner": "Author team", "due": "2027-05-20", "status": "planned" },
+    { "task": "Co-author review and submission", "owner": "Author team", "due": "2027-05-31", "status": "planned" }
+  ]
+}
